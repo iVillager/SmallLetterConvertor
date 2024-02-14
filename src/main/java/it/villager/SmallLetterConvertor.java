@@ -7,12 +7,12 @@ public final class SmallLetterConvertor extends JavaPlugin {
 
     public SmallLetterConvertor plugin;
 
-    @Getter
     private Convertor convertor;
 
     @Override
     public void onEnable() {
         this.plugin = this;
+        this.convertor = new Convertor();
     }
 
     @Override
@@ -27,7 +27,4 @@ public final class SmallLetterConvertor extends JavaPlugin {
         return convertor.convertString(input);
     }
 
-    public void getInstance() {
-        convertor = new Convertor(this);
-    }
 }

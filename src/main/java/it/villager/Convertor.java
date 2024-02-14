@@ -8,11 +8,6 @@ import java.util.regex.Pattern;
 public class Convertor {
     private static final Pattern COLOR_PATTERN = Pattern.compile("(&[a-fA-F0-9klmnor]|&#[0-9a-fA-F]{6}&)|<[^>]*>|\\{[^}]*\\}");
     private final Map<Character, String> characterMap = createCharacterMap();
-    private final SmallLetterConvertor plugin;
-
-    public Convertor(SmallLetterConvertor plugin) {
-        this.plugin = plugin;
-    }
 
     public String convertString(String input) {
         if (input == null) {
