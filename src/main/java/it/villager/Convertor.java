@@ -22,29 +22,29 @@ public class Convertor {
         StringBuilder result = new StringBuilder(input.length());
         Matcher matcher = COLOR_PATTERN.matcher(input);
 
-        int currentIndex = 0;
+        int lastEnd = 0;
         while (matcher.find()) {
-            result.append(convertText(input.substring(currentIndex, matcher.start())));
-            result.append(matcher.group());
-            currentIndex = matcher.end();
+
+            for (int i = lastEnd; i < matcher.start(); i++) {
+                result.append(convertCharacter(input.charAt(i)));
+            }
+
+            result.append(input, matcher.start(), matcher.end());
+            lastEnd = matcher.end();
         }
 
-        result.append(convertText(input.substring(currentIndex)));
+        for (int i = lastEnd; i < input.length(); i++) {
+            result.append(convertCharacter(input.charAt(i)));
+        }
+
         return result.toString();
     }
 
-    private String convertText(String text) {
-        StringBuilder convertedText = new StringBuilder(text.length());
-
-        for (int i = 0; i < text.length(); ++i) {
-            char character = text.charAt(i);
-            convertedText.append(characterMap.getOrDefault(character, String.valueOf(character)));
-        }
-
-        return convertedText.toString();
+    private String convertCharacter(char character) {
+        return characterMap.getOrDefault(character, String.valueOf(character));
     }
 
-    private static Map<Character, String> createCharacterMap() {
+    private Map<Character, String> createCharacterMap() {
         Map<Character, String> map = new HashMap<>();
         map.put('A', "ᴀ");
         map.put('B', "ʙ");
