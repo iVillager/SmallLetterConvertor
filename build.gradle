@@ -33,10 +33,10 @@ java {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
-        options.release = targetJavaVersion
-    }
+    sourceCompatibility = '17'
+    targetCompatibility = '17'
 }
+
 
 processResources {
     def props = [version: version]
