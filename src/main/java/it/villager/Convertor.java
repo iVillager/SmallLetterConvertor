@@ -6,8 +6,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Convertor {
+    private static final Pattern COLOR_PATTERN = Pattern.compile("(&[a-fA-F0-9klmnor]|&#[0-9a-fA-F]{6}&)|<[^>]*>|\\{[^}]*\\}");
     private final Map<Character, String> characterMap = createCharacterMap();
-
     private final SmallLetterConvertor plugin;
 
     public Convertor(SmallLetterConvertor plugin) {
@@ -17,40 +17,35 @@ public class Convertor {
     public String convertString(String input) {
         if (input == null) {
             return null;
-        } else {
-            StringBuilder result = new StringBuilder();
-            Pattern colorPattern = Pattern.compile("(&[a-fA-F0-9klmnor]|&#[0-9a-fA-F]{6}&)|<[^>]*>|\\{[^}]*\\}");
-            Matcher matcher = colorPattern.matcher(input);
-
-            int currentIndex;
-            for(currentIndex = 0; matcher.find(); currentIndex = matcher.end()) {
-                result.append(convertText(input.substring(currentIndex, matcher.start())));
-                result.append(matcher.group());
-            }
-
-            result.append(convertText(input.substring(currentIndex)));
-            return result.toString();
         }
+
+        StringBuilder result = new StringBuilder(input.length());
+        Matcher matcher = COLOR_PATTERN.matcher(input);
+
+        int currentIndex = 0;
+        while (matcher.find()) {
+            result.append(convertText(input.substring(currentIndex, matcher.start())));
+            result.append(matcher.group());
+            currentIndex = matcher.end();
+        }
+
+        result.append(convertText(input.substring(currentIndex)));
+        return result.toString();
     }
 
     private String convertText(String text) {
-        StringBuilder convertedText = new StringBuilder();
+        StringBuilder convertedText = new StringBuilder(text.length());
 
-        for(int i = 0; i < text.length(); ++i) {
+        for (int i = 0; i < text.length(); ++i) {
             char character = text.charAt(i);
-            if ((character < 'A' || character > 'Z') && (character < 'a' || character > 'z')) {
-                convertedText.append(character);
-            } else {
-                String unicodeEquivalent = characterMap.getOrDefault(character, String.valueOf(character));
-                convertedText.append(unicodeEquivalent);
-            }
+            convertedText.append(characterMap.getOrDefault(character, String.valueOf(character)));
         }
 
         return convertedText.toString();
     }
 
-    private Map<Character, String> createCharacterMap() {
-        Map<Character, String> map = new HashMap();
+    private static Map<Character, String> createCharacterMap() {
+        Map<Character, String> map = new HashMap<>();
         map.put('A', "ᴀ");
         map.put('B', "ʙ");
         map.put('C', "ᴄ");
