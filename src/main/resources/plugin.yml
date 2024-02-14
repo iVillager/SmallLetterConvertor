@@ -1,0 +1,4 @@
+name: SmallLetterConvertor
+version: '${version}'
+main: it.villager.SmallLetterConvertor
+api-version: '1.20'
